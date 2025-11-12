@@ -2,60 +2,67 @@
 
 ## Overview
 
-**Microsoft MCP Server for Enterprise** is a programmatic interface that enables AI agents to query enterprise data in your Microsoft Entra tenant using natural language. Built on the [https://modelcontextprotocol\\io/](https://modelcontextprotocol\.io/), an open standard for connecting AI models to external tools and services, it translates natural language requests into Microsoft Graph API calls.
+Built on the open [Model Context Protocol](https://modelcontextprotocol.io), the **Microsoft MCP Server for Enterprise** lets AI agents access **Microsoft Entra** data by converting natural language queries into Microsoft Graph API calls.
+This MCP server empowers developers and IT administrators to integrate the management of organizational data into AI-powered workflows.
 
-This server empowers developers and IT administrators to integrate natural language querying and management of organizational identity and device data into AI-powered workflows.
+## Quick Start
 
-## How it works
+To get started with the Microsoft MCP Server for Enterprise, follow these steps:
 
-When an AI client starts, it automatically discovers the Microsoft MCP Server for Enterprise endpoint at `mcp.svc.cloud.microsoft/enterprise` and retrieves the available tools.
+1. Install Microsoft.Entra.Beta PowerShell module:
 
-**Example workflow:**
+   ```powershell
+   Install-Module Microsoft.Entra.Beta -Force -AllowClobber
+   ```
 
-1. **NLP Processing:** The LLM interprets the user's query (for example, "How many users do we have in our Microsoft Entra tenant?") and determines the intent.
+2. Connect Microsoft Entra ID to the tenant you'd like to register the MCP Server:
 
-1. **Semantic Search:** The search_for_graph_examples tool finds relevant API queries that match the intent.
+   ```powershell
+   Connect-Entra -Scopes 'Application.ReadWrite.All', 'DelegatedPermissionGrant.ReadWrite.All'
+   ```
 
-1. **Query Selection:** The LLM selects the best-fit API call (for example, GET /users/\$count).
+3. Run this cmdlet to register the MCP Server for Enterprise in your tenant and grant all permissions to Visual Studio Code:
 
-1. **Execution:** The LLM uses the make_graph_call_readonly tool to execute the API call, respecting user privileges.
+   ```powershell
+   Grant-EntraBetaMCPServerPermission -ApplicationName VisualStudioCode
+   ```
 
-1. **API Processing:** The MCP Server forwards the request to Microsoft Graph and returns the results.
+4. Click [Install Microsoft MCP Server for Enterprise](https://vscode.dev/redirect/mcp/install?name=Microsoft%20MCP%20Server%20for%20Enterprise&config=%7b%22name%22:%22Microsoft%20MCP%20Server%20for%20Enterprise%22%2c%22type%22:%22http%22%2c%22url%22:%22https://mcp.svc.cloud.microsoft/enterprise%22%7d) to launch VS Code's MCP install page.
 
-1. **Natural Language Response:** The LLM converts the response into a user-friendly answer.
+5. Click the Install button in VS Code and Login with your Admin account from the tenant above
+
+6. Open Copilot Chat and ask a question about your tenant.
+
+You will be able to use your own MCP Client by configuring it with the script
+`Grant-EntraBetaMCPServerPermission -ApplicationId <Your_Application_Id>`.
 
 ## Tools
 
-The Microsoft MCP Server for Enterprise provides the following tools for AI agents:
+This MCP Server is atypical, as it doesn't wrap Microsoft Graph requests into individual tools; but it uses Retrieval-augmented generation (RAG) and few-shot technique to generate a full Microsoft Graph query.  
+The MCP Server provides three main tools to facilitate this process:
 
-- **search_for_graph_examples:** Uses retrieval-augmented generation (RAG) to find Microsoft Graph API calls that match user intent.
-
-- **make_graph_call_readonly:** Runs read-only Microsoft Graph API calls, respecting permissions and throttling.
-
-- **get_graph_entity_properties:** Retrieves properties of specific Microsoft Graph entities to help the AI model understand data structures.
-
-## Usage scenarios
-
-- **IT Helpdesk and Support:** Answer questions like "Which users didn't sign in last month?" or "Is MFA enabled for all administrators?" without needing to know specific Microsoft Graph API endpoints.
-
-- **Administrative Reporting:** Generate reports and insights through conversational queries (for example, "Show me the unassigned licenses in my tenant").
-
-- **API Discovery and Prototyping:** Explore and test Microsoft Graph APIs by using natural language before integrating them into applications.
-
-- **Automation and Scripting:** Integrate with scripts, Microsoft Power Platform (Power Platform) flows, or Microsoft Azure Logic Apps (LA) to enable no-code or low-code solutions for querying Microsoft Entra data.
+1. **microsoft_graph_suggest_queries:** Finds relevant Microsoft Graph API calls based on user intent.
+2. **microsoft_graph_get:** Executes read-only Microsoft Graph API calls, respecting User roles and MCP Client scopes.
+3. **microsoft_graph_list_properties:** Retrieves properties of specific Microsoft Graph entities to help the AI model
 
 ## Current scope and capabilities
 
-- **Private Preview:** Read-only enterprise IT scenarios focused on Microsoft Entra identity and directory operations (user, group, application, device management, and administrative actions).
+For **Private Preview**, our focus is to support Read-only enterprise IT scenarios focused on Microsoft Entra identity and directory operations (user, group, application, device management, and administrative actions).
 
-- **Security:** All operations respect Microsoft Graph permissions, privileges, and security policies.
+In particular, the MCP Server can handle queries related to:
+
+1. **Security posture**: authentication methods/strengths, Conditional Access, Security Defaults.
+2. **Privileged access**: Who has which directory roles, how assigned (direct vs group), and PIM status.
+3. **Application risk**: Which Apps / Service Principals exist, who owns them, what permissions/SSO they use, and which are ownerless or external.
+4. **Access governance**: Who has access to what (users, groups, packages); review decisions, automate joiner/mover/leaver.
+5. **Device readiness**: Managed/compliant status, join state, OS/version distribution, and stale or inactive devices.
+6. **Provenance and investigation**: End‑to‑end telemetry (sign‑in, audit, provisioning, network), health alerts, and SLA/availability.
+7. **Optimize spending & hygiene**: License counts/usage, unused or stale apps/groups, domain configuration and contacts.
 
 ## Licensing and costs
 
 - The MCP Server for Enterprise **doesn't require extra cost or separate license**.
-
 - You need the right licenses for the data you access (for example, Microsoft Entra ID P2 for sign-in logs).
-
 - Follows Microsoft Graph API throttling limits.
 
 ## Cloud availability
@@ -86,7 +93,6 @@ For documentation, troubleshooting, and feedback, refer to the official Microsof
 ## Security and compliance
 
 All operations respect Microsoft Graph permissions and security policies.
-
 Ensure compliance with your organizational, regulatory, and contractual requirements when integrating the MCP Server.
 
 ## No warranty/limitation of liability
