@@ -1,12 +1,14 @@
 # Microsoft MCP Server for Enterprise
 
 | ![Microsoft MCP Server for Enterprise Logo](MCPEnterprise_EntraGradient.svg) |
-| :--------------------------------------------------------: |
+| :--------------------------------------------------------------------------: |
 
 ## Overview
 
 Built on the open [Model Context Protocol](https://modelcontextprotocol.io), the public preview of **Microsoft MCP Server for Enterprise** lets AI agents access **Microsoft Entra** data by converting natural language queries into Microsoft Graph API calls.
 This MCP server empowers developers and IT Administrators to integrate the management of organizational data into AI-powered workflows.
+
+Full Documentation: [Overview of Microsoft MCP Server for Enterprise](https://learn.microsoft.com/graph/mcp-server/overview)
 
 ## Quick Start
 
@@ -95,6 +97,8 @@ If you'd like to use your own Registered Application, use the following cmdlets 
 Grant-EntraBetaMCPServerPermission -ApplicationId "<MCP_Client_Application_Id>" -Scopes "<Scope1>", "<Scope2>", "<...>"
 Revoke-EntraBetaMCPServerPermission -ApplicationId "<MCP_Client_Application_Id>" -Scopes "<Scope1>", "<Scope2>", "<...>"
 ```
+
+Learn more: [Manage MCP Server for Enterprise permissions](https://learn.microsoft.com/powershell/entra-powershell/how-to-manage-mcp-server-permissions)
 
 ## Advantages
 
